@@ -1,0 +1,43 @@
+<mxfile host="Electron" modified="2024-06-20T14:49:21.370Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.2 Chrome/114.0.5735.289 Electron/25.9.4 Safari/537.36" etag="JN3CNVLNv8CcUfzNUSSB" version="22.1.2" type="device">
+  <diagram name="Страница — 1" id="QAOES2rsxgINLvXlSmxL">
+    <mxGraphModel dx="823" dy="589" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="h0sbMx4AeCTmEXI2aT-u-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="h0sbMx4AeCTmEXI2aT-u-2" target="h0sbMx4AeCTmEXI2aT-u-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h0sbMx4AeCTmEXI2aT-u-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="h0sbMx4AeCTmEXI2aT-u-2" target="h0sbMx4AeCTmEXI2aT-u-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h0sbMx4AeCTmEXI2aT-u-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="h0sbMx4AeCTmEXI2aT-u-2" target="h0sbMx4AeCTmEXI2aT-u-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h0sbMx4AeCTmEXI2aT-u-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="h0sbMx4AeCTmEXI2aT-u-2" target="h0sbMx4AeCTmEXI2aT-u-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h0sbMx4AeCTmEXI2aT-u-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="h0sbMx4AeCTmEXI2aT-u-2" target="h0sbMx4AeCTmEXI2aT-u-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h0sbMx4AeCTmEXI2aT-u-2" value="Отел информационных систем" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="311" y="90" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="h0sbMx4AeCTmEXI2aT-u-3" value="Группа управления производством и развития" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="48" y="229" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="h0sbMx4AeCTmEXI2aT-u-4" value="Группа систем управления ресурсами предприяти" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="179" y="229" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="h0sbMx4AeCTmEXI2aT-u-8" value="Группа нормативно-спавочной информации" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="311.5" y="229" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="h0sbMx4AeCTmEXI2aT-u-9" value="Группа сопровождения информационных систем" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="442.5" y="229" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="h0sbMx4AeCTmEXI2aT-u-10" value="Бюро программного обеспечения собственной разработки" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="574" y="229" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
