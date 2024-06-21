@@ -16,12 +16,10 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\RH.Application\RH.Application.csproj" />
-    <ProjectReference Include="..\RH.Logic\RH.Logic.csproj" />
-    <ProjectReference Include="..\RH.Persistence\RH.Persistence.csproj" />
+    <Folder Include="Models\" />
+    <Folder Include="Repositories\" />
+    <Folder Include="LocalFiles\" />
+    <Folder Include="Another\" />
   </ItemGroup>
 
 </Project>
