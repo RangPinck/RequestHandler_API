@@ -1,0 +1,17 @@
+create database RequestHandler;
+use RequestHandler;
+
+create table [User](
+	[user_id]  uniqueidentifier not null constraint pk_user primary key default newid(),
+	[login] nvarchar(50) not null constraint un_user_login unique,
+	[password] nvarchar(50) not null
+);
+--старнтовые данные для администратора
+insert into [User] ([login], [password]) values
+('admin','admin')
+
+select * from [User]
+
+delete [User] where [login] like 'login%'
+
+drop table [User]
