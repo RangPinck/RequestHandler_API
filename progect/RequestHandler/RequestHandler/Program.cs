@@ -1,4 +1,7 @@
 
+using Microsoft.EntityFrameworkCore;
+using RequestHandler.Models;
+
 namespace RequestHandler
 {
     public class Program
@@ -6,17 +9,25 @@ namespace RequestHandler
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
-
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddDbContext<RequestHandlerContext>(
+                options =>
+                {
+                    options.UseSqlServer(
+
+                        //АО "НЗ 70-летия Победы"
+                        //builder.Configuration.GetConnectionString("AtTheFactory")
+                        //"локальная"
+                        builder.Configuration.GetConnectionString("LocalDbFirst")
+                        //builder.Configuration.GetConnectionString("LocalDbSecond")
+                        );
+                });
+
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
