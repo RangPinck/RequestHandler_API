@@ -1,6 +1,8 @@
 
 using Microsoft.EntityFrameworkCore;
+using RequestHandler.Interfaces;
 using RequestHandler.Models;
+using RequestHandler.Repositories;
 
 namespace RequestHandler
 {
@@ -9,6 +11,7 @@ namespace RequestHandler
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddScoped<IUserRepository, UserReposity>();
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
