@@ -1,17 +1,62 @@
-create database RequestHandler;
-use RequestHandler;
+create database [RequestHandler];
+use [RequestHandler];
+
+create table [Roles](
+	[role_id] uniqueidentifier not null constraint pk_role primary key default newid(),
+	[title] nvarchar(50) not null constraint un_role_title unique
+);
 
 create table [User](
 	[user_id]  uniqueidentifier not null constraint pk_user primary key default newid(),
 	[login] nvarchar(50) not null constraint un_user_login unique,
-	[password] nvarchar(50) not null
+	[password] nvarchar(max) not null,
+	[surname] nvarchar(50) not null,
+	[name] nvarchar(50) not null,
+	[role] uniqueidentifier not null constraint fk_role_to_user foreign key
+	references [Roles]([role_id]) on delete cascade
 );
---старнтовые данные для администратора
-insert into [User] ([login], [password]) values
-('admin','admin')
 
-select * from [User]
+create table [Status](
+	[status_id] uniqueidentifier not null constraint pk_status primary key default newid(),
+	[title] nvarchar(50) not null constraint un_status_title unique
+);
 
-delete [User] where [login] like 'login%'
+create table [Documents](
+	[document_id] uniqueidentifier not null constraint pk_document primary key default newid(),
+	[title] nvarchar(50) not null constraint un_document_title unique,
+	[path] nvarchar(max) not null
+);
 
-drop table [User]
+create table [Appointments](
+	[appintment_id] uniqueidentifier not null constraint pk_appintment primary key default newid(),
+	[problem] nvarchar(50) not null,
+	[discription_problem] nvarchar(max),
+	[place] nvarchar(max) not null,
+	[date_create] datetime not null default getdate(),
+	[date_approve] datetime,
+	[date_fix] datetime,
+	[document] nvarchar(max),
+	[status] uniqueidentifier not null constraint fk_status_to_appintment foreign key
+	references [Status]([status_id]) on delete cascade,
+	[user] uniqueidentifier not null constraint fk_user_to_appintment foreign key
+	references [User]([user_id]),
+	[approval] uniqueidentifier constraint fk_approval_to_appintment foreign key
+	references [User]([user_id]),
+	[master] uniqueidentifier constraint fk_master_to_appintment foreign key
+	references [User]([user_id])
+);
+
+select * from [Roles];
+select * from [User];
+select * from [Status];
+select * from [Documents];
+select * from [Appointments];
+
+drop table [Roles];
+drop table [User];
+drop table [Status];
+drop table [Documents];
+drop table [Appointments];
+
+use master;
+drop database RequestHandler;
