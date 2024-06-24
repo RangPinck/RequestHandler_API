@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace RequestHandler.Models;
 
@@ -52,7 +50,9 @@ public partial class RequestHandlerContext : DbContext
             entity.Property(e => e.Problem)
                 .HasMaxLength(50)
                 .HasColumnName("problem");
-            entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.Status)
+                .HasDefaultValueSql("((1))")
+                .HasColumnName("status");
             entity.Property(e => e.User).HasColumnName("user");
 
             entity.HasOne(d => d.ApprovalNavigation).WithMany(p => p.AppointmentApprovalNavigations)
@@ -94,9 +94,7 @@ public partial class RequestHandlerContext : DbContext
 
             entity.HasIndex(e => e.Title, "un_role_title").IsUnique();
 
-            entity.Property(e => e.RoleId)
-                .HasDefaultValueSql("(newid())")
-                .HasColumnName("role_id");
+            entity.Property(e => e.RoleId).HasColumnName("role_id");
             entity.Property(e => e.Title)
                 .HasMaxLength(50)
                 .HasColumnName("title");
@@ -110,9 +108,7 @@ public partial class RequestHandlerContext : DbContext
 
             entity.HasIndex(e => e.Title, "un_status_title").IsUnique();
 
-            entity.Property(e => e.StatusId)
-                .HasDefaultValueSql("(newid())")
-                .HasColumnName("status_id");
+            entity.Property(e => e.StatusId).HasColumnName("status_id");
             entity.Property(e => e.Title)
                 .HasMaxLength(50)
                 .HasColumnName("title");

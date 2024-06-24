@@ -8,10 +8,10 @@ create table [Roles](
 );
 go
 insert into [Roles] (title)
-values ('РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ'),
-('РњР°СЃС‚РµСЂ'),
-('Р СѓРєРѕРІРѕРґРёС‚РµР»СЊ'),
-('РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ');
+values ('Администратор'),
+('Мастер'),
+('Руководитель'),
+('Пользователь');
 go
 create table [User](
 	[user_id]  uniqueidentifier not null constraint pk_user primary key constraint def_user_guid default newid(),
@@ -27,15 +27,15 @@ insert into [User] ([login],[password],[surname],[name],[role])
 values
 --password without hexed for checking work
 --12345
-('Ivan_Kuznetsov','5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5','РљСѓР·РЅРµС†РѕРІ','РРІР°РЅ',1),
+('Ivan_Kuznetsov','5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5','Кузнецов','Иван',1),
 --67891
-('Maria_Ivanova','44011a51f70a067c690dfb9959cdab5d7c37a28044f7604f047fd9dafb45cd02','РРІР°РЅРѕРІР°','РњР°СЂРёСЏ',2),
+('Maria_Ivanova','44011a51f70a067c690dfb9959cdab5d7c37a28044f7604f047fd9dafb45cd02','Иванова','Мария',2),
 --01112
-('Peter_Sokolov','3d60c92d2c4610ac1245238497b7902e66eef0ec669d2907ddeaa7e40254df41','РЎРѕРєРѕР»РѕРІ','РџС‘С‚СЂ',3),
+('Peter_Sokolov','3d60c92d2c4610ac1245238497b7902e66eef0ec669d2907ddeaa7e40254df41','Соколов','Пётр',3),
 --13141
-('Olga_Vasilieva','986158efae5d9b5106d797a9f7bb4a990c1ddcbb9460de3259241b798d37d0b9','Р’Р°СЃРёР»СЊРµРІР°','РћР»СЊРіР°',4),
+('Olga_Vasilieva','986158efae5d9b5106d797a9f7bb4a990c1ddcbb9460de3259241b798d37d0b9','Васильева','Ольга',4),
 --51617
-('Jacob_Sidorov','54037ac535a79aab88e96fa2321265456b637e9c679f5f8ed1d7962bd805cad1','РЎРёРґРѕСЂРѕРІ','РЇРєРѕРІ',4);
+('Jacob_Sidorov','54037ac535a79aab88e96fa2321265456b637e9c679f5f8ed1d7962bd805cad1','Сидоров','Яков',4);
 go
 create table [Status](
 	[status_id] int identity constraint pk_status primary key,
@@ -43,9 +43,9 @@ create table [Status](
 );
 go
 insert into [Status] ([title])
-values ('Р Р°СЃСЃРјР°С‚СЂРёРІР°РµС‚СЃСЏ'),
-('Р Р°СЃСЃРјРѕС‚СЂРµРЅР°'),
-('РСЃРїСЂР°РІР»РµРЅР°')
+values ('Рассматривается'),
+('Рассмотрена'),
+('Исправлена')
 go
 create table [Documents](
 	[document_id] uniqueidentifier not null constraint pk_document primary key constraint def_document_guid default newid(),

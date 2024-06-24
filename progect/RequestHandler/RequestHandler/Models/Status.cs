@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace RequestHandler.Models;
+﻿namespace RequestHandler.Models;
 
 public partial class Status
 {
-    public Guid StatusId { get; set; }
+    public int StatusId { get; set; }
 
     public string Title { get; set; } = null!;
 

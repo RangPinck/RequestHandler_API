@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace RequestHandler.Models;
+﻿namespace RequestHandler.Models;
 
 public partial class Document
 {

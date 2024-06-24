@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace RequestHandler.Models;
+﻿namespace RequestHandler.Models;
 
 public partial class Appointment
 {
@@ -21,7 +18,7 @@ public partial class Appointment
 
     public string? Document { get; set; }
 
-    public Guid Status { get; set; }
+    public int Status { get; set; }
 
     public Guid User { get; set; }
 
