@@ -1,4 +1,3 @@
-
 using Microsoft.EntityFrameworkCore;
 using RequestHandler.Interfaces;
 using RequestHandler.Models;
@@ -11,7 +10,7 @@ namespace RequestHandler
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddScoped<IUserRepository, UserReposity>();
+            builder.Services.AddScoped<IUserRepository,UserRepository>();
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -38,12 +37,7 @@ namespace RequestHandler
             }
 
             app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
-
             app.MapControllers();
-
             app.Run();
         }
     }

@@ -25,13 +25,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Interfaces\" />
     <Folder Include="Models\" />
     <Folder Include="LocalFiles\" />
-    <Folder Include="Another\" />
     <Folder Include="FilesOfUsers\" />
-    <Folder Include="Repositories\" />
+    <Folder Include="Mapping\" />
   </ItemGroup>
 
 </Project>
