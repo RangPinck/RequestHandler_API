@@ -12,6 +12,7 @@ namespace RequestHandler
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddScoped<IUserRepository,UserRepository>();
             builder.Services.AddScoped<IRolesRepository, RolesRepository>();
+            builder.Services.AddScoped<IStatusRepository, StatusRepository>();
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();

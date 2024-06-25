@@ -15,14 +15,15 @@ namespace RequestHandler.Controllers
             _repository = repository;
         }
 
+        //проверить ещё раз
         [HttpGet("GetRoles")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Role>))]
         public async Task<IActionResult> GetRoles()
         {
+            var roles = await _repository.GetRoles();
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
-            var roles = await _repository.GetRoles();
 
             return Ok(roles);
         }
