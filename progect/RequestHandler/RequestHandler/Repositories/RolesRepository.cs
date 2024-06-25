@@ -7,7 +7,7 @@ namespace RequestHandler.Repositories
     {
         private readonly RequestHandlerContext _context;
 
-        public  RolesRepository(RequestHandlerContext context)
+        public RolesRepository(RequestHandlerContext context)
         {
             _context = context;
         }

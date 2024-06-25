@@ -21,6 +21,7 @@ create table [User](
 	[name] nvarchar(50) not null,
 	[role] int not null constraint fk_role_to_user foreign key
 	references [Roles]([role_id]) on delete cascade
+	constraint chk_user_role check ([role] >= 1 and [role] <= 4)
 );
 go
 insert into [User] ([login],[password],[surname],[name],[role])
@@ -47,31 +48,47 @@ values ('Рассматривается'),
 ('Рассмотрена'),
 ('Исправлена')
 go
-create table [Documents](
-	[document_id] uniqueidentifier not null constraint pk_document primary key constraint def_document_guid default newid(),
-	[title] nvarchar(50) not null constraint un_document_title unique,
-	[path] nvarchar(max) not null
-);
-go
-
-go
 create table [Appointments](
-	[appintment_id] uniqueidentifier not null constraint pk_appintment primary key default newid(),
+	[appointment_id] uniqueidentifier not null constraint pk_appintment primary key default newid(),
 	[problem] nvarchar(50) not null,
 	[discription_problem] nvarchar(max),
 	[place] nvarchar(max) not null,
-	[date_create] datetime not null default getdate(),
-	[date_approve] datetime,
-	[date_fix] datetime,
-	[document] nvarchar(max),
+	[date_create] datetime not null constraint def_appointment_date_create default getdate(),
+	[date_approve] datetime constraint chk_appointment_date_approve check ([date_approve] <= getdate()),
+	[date_fix] datetime constraint chk_appointment_date_fix check ([date_fix] < getdate()),
 	[status] int not null constraint fk_status_to_appintment foreign key
-	references [Status]([status_id]) on delete cascade constraint def_appointment_status default 1,
-	[user] uniqueidentifier not null constraint fk_user_to_appintment foreign key
-	references [User]([user_id]),
-	[approval] uniqueidentifier constraint fk_approval_to_appintment foreign key
-	references [User]([user_id]),
-	[master] uniqueidentifier constraint fk_master_to_appintment foreign key
-	references [User]([user_id])
+	references [Status]([status_id]) on delete cascade 
+	constraint def_appointment_status default 1
+	constraint chk_appointment_status check ([status] >= 1 and [status] <= 3),
+);
+go
+insert into [Appointments] ([problem], [discription_problem], [place], [status],[date_create], [date_approve], [date_fix])
+values 
+('Установка ПО', 'Пожалуйста, установите такие прогрммы как Visual Studio, Git Bash и 1C.', 'Отдел управления цехами', 2,'','', null),
+('Сломался телефон',null,'Бухгалтерия, 4-тое здание, 11 этаж, 10 кабинет', 1,getdate(),null, null),
+('Компьютер не видит принтер',null,'Бухгалтерия, 4-тое здание, 7 этаж, 1 кабинет', 3, '2024-06-01T09:00:00','2024-06-02T09:00:00', '2024-06-03T09:00:00'),
+('Протёк куллер',null,'Бухгалтерия, 4-тое здание, 7 этаж, 1 кабинет', 1, getdate(),null, null),
+('установка ПО','Пожалуйста, установите 1C.','Бухгалтерия, 4-тое здание, 7 этаж, 1 кабинет', 3, '2024-06-03T09:00:00','2024-06-04T09:00:00', '2024-06-05T09:00:00')
+go
+create table [User_appointment](
+	[appointment] uniqueidentifier not null constraint fk_appointment_to_User_appointment foreign key
+	references [Appointments]([appointment_id]) on delete cascade,
+	[user] uniqueidentifier not null constraint fk_user_to_User_appointment foreign key
+	references [User]([user_id]) on delete cascade
+);
+insert into [User_appointment] ([appointment], [user]) values
+('103C043B-3EB7-4A97-9E71-4E8FFBB081A8','26F31915-38CD-46EA-9E01-462CC0C59E34'),
+('69D03AE9-6A0E-4990-93B9-6919322EDC16','2C94A801-74C6-4CFB-B431-775C71430DB6'),
+('587DA282-8321-4DBE-93C4-A5913B0595BF','4B830D93-238E-4DB9-B840-77AD46EB6DFA'),
+('50A4190A-4580-4BC1-B77A-C278DED96D58','1CC3052F-938A-4F0F-94B0-8054DEFB60E4'),
+('25FCD773-14FC-4DC4-BFA8-C9F735A44432','26F31915-38CD-46EA-9E01-462CC0C59E34')
+go
+--если заявка пустая, то документ от предприятия
+create table [Documents](
+	[document_id] uniqueidentifier not null constraint pk_document primary key constraint def_document_guid default newid(),
+	[title] nvarchar(50) not null constraint un_document_title unique,
+	[appointment] uniqueidentifier constraint fk_appointment_to_document foreign key
+	references [Appointments]([appointment_id]) on delete cascade
 );
 
 --select * from [Roles];
@@ -79,12 +96,14 @@ create table [Appointments](
 --select * from [Status];
 --select * from [Documents];
 --select * from [Appointments];
+--select * from [User_appointment];
 
---drop table [Roles];
---drop table [User];
---drop table [Status];
+--drop table [User_appointment];
 --drop table [Documents];
 --drop table [Appointments];
+--drop table [User];
+--drop table [Roles];
+--drop table [Status];
 
---use master;
+--use tempdb;
 --drop database RequestHandler;

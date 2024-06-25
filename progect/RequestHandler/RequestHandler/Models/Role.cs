@@ -1,4 +1,7 @@
-﻿namespace RequestHandler.Models;
+﻿using System;
+using System.Collections.Generic;
+
+namespace RequestHandler.Models;
 
 public partial class Role
 {

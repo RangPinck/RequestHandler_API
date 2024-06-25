@@ -19,14 +19,13 @@ namespace RequestHandler.Controllers
             _mapper = mapper;
         }
 
-        //проверить ещё раз (доступность и маппинг)
         [HttpGet("GetStatuses")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<StatusDto>))]
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetStatuses()
         {
             var status =
-                _mapper.Map<StatusDto>(
+                _mapper.Map<List<StatusDto>>(
                 await _repository.GetStatuses());
 
             if (!ModelState.IsValid)

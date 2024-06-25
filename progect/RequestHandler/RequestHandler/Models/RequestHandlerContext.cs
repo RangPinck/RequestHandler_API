@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace RequestHandler.Models;
 
@@ -23,16 +25,17 @@ public partial class RequestHandlerContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
+    public virtual DbSet<UserAppointment> UserAppointments { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Appointment>(entity =>
         {
-            entity.HasKey(e => e.AppintmentId).HasName("pk_appintment");
+            entity.HasKey(e => e.AppointmentId).HasName("pk_appintment");
 
-            entity.Property(e => e.AppintmentId)
+            entity.Property(e => e.AppointmentId)
                 .HasDefaultValueSql("(newid())")
-                .HasColumnName("appintment_id");
-            entity.Property(e => e.Approval).HasColumnName("approval");
+                .HasColumnName("appointment_id");
             entity.Property(e => e.DateApprove)
                 .HasColumnType("datetime")
                 .HasColumnName("date_approve");
@@ -44,8 +47,6 @@ public partial class RequestHandlerContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("date_fix");
             entity.Property(e => e.DiscriptionProblem).HasColumnName("discription_problem");
-            entity.Property(e => e.Document).HasColumnName("document");
-            entity.Property(e => e.Master).HasColumnName("master");
             entity.Property(e => e.Place).HasColumnName("place");
             entity.Property(e => e.Problem)
                 .HasMaxLength(50)
@@ -53,24 +54,10 @@ public partial class RequestHandlerContext : DbContext
             entity.Property(e => e.Status)
                 .HasDefaultValueSql("((1))")
                 .HasColumnName("status");
-            entity.Property(e => e.User).HasColumnName("user");
-
-            entity.HasOne(d => d.ApprovalNavigation).WithMany(p => p.AppointmentApprovalNavigations)
-                .HasForeignKey(d => d.Approval)
-                .HasConstraintName("fk_approval_to_appintment");
-
-            entity.HasOne(d => d.MasterNavigation).WithMany(p => p.AppointmentMasterNavigations)
-                .HasForeignKey(d => d.Master)
-                .HasConstraintName("fk_master_to_appintment");
 
             entity.HasOne(d => d.StatusNavigation).WithMany(p => p.Appointments)
                 .HasForeignKey(d => d.Status)
                 .HasConstraintName("fk_status_to_appintment");
-
-            entity.HasOne(d => d.UserNavigation).WithMany(p => p.AppointmentUserNavigations)
-                .HasForeignKey(d => d.User)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_user_to_appintment");
         });
 
         modelBuilder.Entity<Document>(entity =>
@@ -82,10 +69,15 @@ public partial class RequestHandlerContext : DbContext
             entity.Property(e => e.DocumentId)
                 .HasDefaultValueSql("(newid())")
                 .HasColumnName("document_id");
-            entity.Property(e => e.Path).HasColumnName("path");
+            entity.Property(e => e.Appointment).HasColumnName("appointment");
             entity.Property(e => e.Title)
                 .HasMaxLength(50)
                 .HasColumnName("title");
+
+            entity.HasOne(d => d.AppointmentNavigation).WithMany(p => p.Documents)
+                .HasForeignKey(d => d.Appointment)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("fk_appointment_to_document");
         });
 
         modelBuilder.Entity<Role>(entity =>
@@ -140,6 +132,24 @@ public partial class RequestHandlerContext : DbContext
             entity.HasOne(d => d.RoleNavigation).WithMany(p => p.Users)
                 .HasForeignKey(d => d.Role)
                 .HasConstraintName("fk_role_to_user");
+        });
+
+        modelBuilder.Entity<UserAppointment>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("User_appointment");
+
+            entity.Property(e => e.Appointment).HasColumnName("appointment");
+            entity.Property(e => e.User).HasColumnName("user");
+
+            entity.HasOne(d => d.AppointmentNavigation).WithMany()
+                .HasForeignKey(d => d.Appointment)
+                .HasConstraintName("fk_appointment_to_User_appointment");
+
+            entity.HasOne(d => d.UserNavigation).WithMany()
+                .HasForeignKey(d => d.User)
+                .HasConstraintName("fk_user_to_User_appointment");
         });
 
         OnModelCreatingPartial(modelBuilder);

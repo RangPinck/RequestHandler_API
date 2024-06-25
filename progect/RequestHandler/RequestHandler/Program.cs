@@ -24,9 +24,9 @@ namespace RequestHandler
                     options.UseSqlServer(
 
                         //АО "НЗ 70-летия Победы"
-                        builder.Configuration.GetConnectionString("AtTheFactory")
+                        //builder.Configuration.GetConnectionString("AtTheFactory")
                         //"локальная"
-                        //builder.Configuration.GetConnectionString("LocalDbFirst")
+                        builder.Configuration.GetConnectionString("LocalDbFirst")
                         //builder.Configuration.GetConnectionString("LocalDbSecond")
                         );
                 });

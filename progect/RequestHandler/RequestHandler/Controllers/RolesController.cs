@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using RequestHandler.DTO;
+using RequestHandler.Interfaces;
 using RequestHandler.Models;
 using RequestHandler.Repositories;
 
@@ -10,10 +11,10 @@ namespace RequestHandler.Controllers
     [ApiController]
     public class RolesController : Controller
     {
-        private readonly RolesRepository _repository;
+        private readonly IRolesRepository _repository;
         private readonly IMapper _mapper;
 
-        public RolesController(RolesRepository repository, IMapper mapper)
+        public RolesController(IRolesRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;

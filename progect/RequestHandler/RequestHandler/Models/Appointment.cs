@@ -1,8 +1,11 @@
-﻿namespace RequestHandler.Models;
+﻿using System;
+using System.Collections.Generic;
+
+namespace RequestHandler.Models;
 
 public partial class Appointment
 {
-    public Guid AppintmentId { get; set; }
+    public Guid AppointmentId { get; set; }
 
     public string Problem { get; set; } = null!;
 
@@ -16,21 +19,9 @@ public partial class Appointment
 
     public DateTime? DateFix { get; set; }
 
-    public string? Document { get; set; }
-
     public int Status { get; set; }
 
-    public Guid User { get; set; }
-
-    public Guid? Approval { get; set; }
-
-    public Guid? Master { get; set; }
-
-    public virtual User? ApprovalNavigation { get; set; }
-
-    public virtual User? MasterNavigation { get; set; }
+    public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
 
     public virtual Status StatusNavigation { get; set; } = null!;
-
-    public virtual User UserNavigation { get; set; } = null!;
 }

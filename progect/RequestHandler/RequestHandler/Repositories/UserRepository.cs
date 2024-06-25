@@ -79,7 +79,6 @@ namespace RequestHandler.Repositories
         }
 
         //создание пользователя
-        //проверить на правильность при подключении к базе (нужен правильный guid)
         public async Task<bool> CreateUser(string login, string password, string surname, string name, int role)
         {
             password = Hashing.ToSHA256(password);

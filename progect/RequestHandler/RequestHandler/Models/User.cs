@@ -1,4 +1,7 @@
-﻿namespace RequestHandler.Models;
+﻿using System;
+using System.Collections.Generic;
+
+namespace RequestHandler.Models;
 
 public partial class User
 {
@@ -13,12 +16,6 @@ public partial class User
     public string Name { get; set; } = null!;
 
     public int Role { get; set; }
-
-    public virtual ICollection<Appointment> AppointmentApprovalNavigations { get; set; } = new List<Appointment>();
-
-    public virtual ICollection<Appointment> AppointmentMasterNavigations { get; set; } = new List<Appointment>();
-
-    public virtual ICollection<Appointment> AppointmentUserNavigations { get; set; } = new List<Appointment>();
 
     public virtual Role RoleNavigation { get; set; } = null!;
 }

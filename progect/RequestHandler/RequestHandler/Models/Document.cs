@@ -1,4 +1,7 @@
-﻿namespace RequestHandler.Models;
+﻿using System;
+using System.Collections.Generic;
+
+namespace RequestHandler.Models;
 
 public partial class Document
 {
@@ -6,5 +9,7 @@ public partial class Document
 
     public string Title { get; set; } = null!;
 
-    public string Path { get; set; } = null!;
+    public Guid? Appointment { get; set; }
+
+    public virtual Appointment? AppointmentNavigation { get; set; }
 }
