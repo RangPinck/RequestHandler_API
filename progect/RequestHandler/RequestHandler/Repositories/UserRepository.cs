@@ -125,7 +125,15 @@ namespace RequestHandler.Repositories
                 user.Role = (int)role;
             }
 
-            _context.Update(user);
+            _context.Users.Update(user);
+            return await Save();
+        }
+
+        //удаление пользователя администратором
+        public async Task<bool> DeleteUser(Guid id)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == id);
+            _context.Users.Remove(user);
             return await Save();
         }
     }

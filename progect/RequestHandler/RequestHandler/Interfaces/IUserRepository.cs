@@ -29,6 +29,7 @@ namespace RequestHandler.Interfaces
         Task<bool> CreateUser(string login, string password, string surname, string name, int role);
 
         //удаление пользователя администратором
+        Task<bool> DeleteUser(Guid id);
 
         //обновление пользователя администратором
         Task<bool> UpdateUser(Guid id, string? login = null, string? password = null, string? surname = null, string? name = null, int? role = null);

@@ -142,5 +142,30 @@ namespace RequestHandler.Controllers
 
             return Ok("Successefully updated.");
         }
+   
+        [HttpDelete("DeleteUser")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> DeleteUser(Guid logUserId, Guid id)
+        {
+            if (!await _repository.ValidateAdmin(logUserId))
+                return BadRequest($"No correct request: user with \"{logUserId}\" id not validation.");
+
+            if (!await _repository.UserExists(id))
+                return NotFound($"User with id \"{id}\" not found.");
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if(!await _repository.DeleteUser(id))
+            {
+                ModelState.AddModelError("", "Somthing went wrong deleting user.");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successefully deleted.");
+        }
+
     }
 }
