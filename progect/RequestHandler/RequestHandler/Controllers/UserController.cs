@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
 using RequestHandler.DTO;
 using RequestHandler.Interfaces;
@@ -110,6 +111,36 @@ namespace RequestHandler.Controllers
             }
 
             return Ok("Successefully created.");
+        }
+
+        [HttpPut("UpdateUser")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> UpdateUser(Guid logUserId, Guid id, string? login = null, string? password = null, string? surname = null, string? name = null, int? role = null)
+        {
+            if (!await _repository.ValidateAdmin(logUserId))
+                return BadRequest($"No correct request: user with \"{logUserId}\" id not validation.");
+
+            if (!await _repository.UserExists(id))
+                return NotFound($"User with id \"{id}\" not found.");
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!await _repository.UpdateUser(
+                id: id,
+                login: login,
+                password: password,
+                surname: surname,
+                name: name,
+                role: role))
+            {
+                ModelState.AddModelError("","Somthing went wrong updateing user.");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successefully updated.");
         }
     }
 }
