@@ -19,6 +19,8 @@ namespace RequestHandler.Mapping
                 opt => opt.MapFrom(uDto => uDto.Name))
                 .ForMember(u => u.Role,
                 opt => opt.MapFrom(uDto => uDto.RoleNavigation.Title));
+            CreateMap<Role, RolesDto>();
+            CreateMap<Status, StatusDto>();
         }
     }
 }
