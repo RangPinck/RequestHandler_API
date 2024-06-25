@@ -17,11 +17,9 @@ namespace RequestHandler.Interfaces
         Task<bool> ValidateMaster(Guid logUserId);
 
         //получние списка всех пользователей
-        //если надо будет, по поменять тип списка данных
         Task<ICollection<User>> GetAllUsers(int? roleId = null);
 
         //авторизация
-        //если надо будет, по поменять тип списка данных
         Task<User> Authorithation(string login, string password);
     }
 }

@@ -26,11 +26,13 @@ namespace RequestHandler.Repositories
             List<User> users;
 
             if (roleId != null)
-                users = _context.Users.Where(u => u.Role == (int)roleId).ToList();
+                users = _context.Users.Where(u => u.Role == (int)roleId).
+                    Include(r => r.RoleNavigation).ToList();
             else
-                users = _context.Users.ToList();
+                users = _context.Users.
+                    Include(r => r.RoleNavigation).ToList();
 
-            return users;
+            return users.OrderBy(r => r.RoleNavigation.RoleId).ToList();
         }
 
         //проверка на администратора

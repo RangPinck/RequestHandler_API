@@ -11,8 +11,10 @@ namespace RequestHandler
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddScoped<IUserRepository,UserRepository>();
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddAuthorization();
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<RequestHandlerContext>(
                 options =>
@@ -37,6 +39,7 @@ namespace RequestHandler
             }
 
             app.UseHttpsRedirection();
+            app.UseAuthorization();
             app.MapControllers();
             app.Run();
         }
