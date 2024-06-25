@@ -77,7 +77,5 @@ namespace RequestHandler.Repositories
                 .FirstOrDefaultAsync(u => u.Login == login 
                     && u.Password == hexPassword);
         }
-
-        
     }
 }
