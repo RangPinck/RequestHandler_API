@@ -15,9 +15,9 @@ namespace RequestHandler.Repositories
         }
 
         //проверка наличия пользователя
-        public async Task<bool> UserExists(Guid logUserId)
+        public async Task<bool> UserExists(string login)
         {
-            return await _context.Users.AnyAsync(u => u.UserId == logUserId);
+            return await _context.Users.AnyAsync(u => u.Login == login);
         }
 
         //получние списка всех пользователей
@@ -72,7 +72,10 @@ namespace RequestHandler.Repositories
         public async Task<User> Authorithation(string login, string password)
         {
             string hexPassword = Hashing.ToSHA256(password);
-            return await _context.Users.FirstOrDefaultAsync(u => u.Login == login && u.Password == hexPassword);
+            return await _context.Users
+                .Include(r => r.RoleNavigation)
+                .FirstOrDefaultAsync(u => u.Login == login 
+                    && u.Password == hexPassword);
         }
 
         

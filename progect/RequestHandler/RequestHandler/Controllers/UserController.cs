@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
-using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
 using RequestHandler.DTO;
 using RequestHandler.Interfaces;
-using RequestHandler.Models;
 
 namespace RequestHandler.Controllers
 {
@@ -20,11 +18,9 @@ namespace RequestHandler.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet("GetAllUsers")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<UserDto>))]
-        //сделать проверку на пустой результат
         [ProducesResponseType(400)]
-        //сделать преобразование к нормальному виду ответа
         public async Task<IActionResult> GetAllUsers(Guid logUserId, int? roleId = null)
         {
             if (roleId <= 0 || roleId >= 5)
@@ -42,6 +38,34 @@ namespace RequestHandler.Controllers
                 await _repository.GetAllUsers(roleId));
 
             return Ok(users);
+        }
+
+
+        [HttpGet("Authorithation")]
+        [ProducesResponseType(200, Type = typeof(UserDto))]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> Authorithation(string login, string password)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (string.IsNullOrEmpty(login))
+                return BadRequest($"No correct request: login is null or empty");
+
+            if (string.IsNullOrEmpty(password))
+                return BadRequest($"No correct request: password is null or empty");
+
+            if (!await _repository.UserExists(login))
+                return NotFound($"User with login {login} not found.");
+
+            var user =
+                _mapper.Map<UserDto>(
+                await _repository.Authorithation(login, password));
+
+            if (user == null)
+                return BadRequest($"No correct request: password is not correct.");
+
+            return Ok(user);
         }
     }
 }

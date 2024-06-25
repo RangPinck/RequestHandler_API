@@ -5,7 +5,7 @@ namespace RequestHandler.Interfaces
     public interface IUserRepository
     {
         //проверка наличия пользователя
-        Task<bool> UserExists(Guid logUserId);
+        Task<bool> UserExists(string login);
 
         //проверка на администратора
         Task<bool> ValidateAdmin(Guid logUserId);
