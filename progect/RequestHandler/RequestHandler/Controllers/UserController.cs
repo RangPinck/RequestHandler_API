@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.Extensions.FileProviders;
 using RequestHandler.DTO;
 using RequestHandler.Interfaces;
 using RequestHandler.Models;
@@ -167,5 +169,40 @@ namespace RequestHandler.Controllers
             return Ok("Successefully deleted.");
         }
 
+        [HttpPost("UploadFile")]
+        public async Task<IActionResult> UploadFile(IFormFile file)
+        {
+            var uploadPath = $"{Directory.GetCurrentDirectory()}\\LocalFiles";
+
+            if (!Directory.Exists(uploadPath))
+            {
+                Directory.CreateDirectory(uploadPath);
+            }
+
+            string fullPath = $"{uploadPath}\\{file.FileName}";
+
+            using (var fileStream = new FileStream(fullPath, FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
+            }
+
+            return Ok($"Successefully upload.{file.FileName}");
+        }
+
+        [HttpGet("DownloadFile")]
+        public async Task<IActionResult> DownloadFile(string fileTitle)
+        {
+            //var uploadPath = $"{Directory.GetCurrentDirectory()}\\LocalFiles\\{fileTitle}";
+            //var provider = new FileExtensionContentTypeProvider();
+
+            //if (!provider.TryGetContentType(uploadPath, out var contentType))
+            //{
+            //    contentType = "application/octet-stream";
+            //}
+
+            //var bytes = await System.IO.File.ReadAllBytesAsync(uploadPath);
+
+            //return File(bytes,contentType,Path.GetFileName(uploadPath));
+        }
     }
 }
