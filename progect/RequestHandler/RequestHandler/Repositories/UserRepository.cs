@@ -77,5 +77,34 @@ namespace RequestHandler.Repositories
                 .FirstOrDefaultAsync(u => u.Login == login 
                     && u.Password == hexPassword);
         }
+
+        //создание пользователя
+        //проверить на правильность при подключении к базе (нужен правильный guid)
+        public async Task<bool> CreateUser(string login, string password, string surname, string name, int role)
+        {
+            password = Hashing.ToSHA256(password);
+
+            User user = new User()
+            {
+                UserId = new Guid(),
+                Login = login,
+                Password = password,
+                Surname = surname,
+                Name = name,
+                Role = role
+            };
+
+            _context.Users.Add(user);
+
+            return await Save();
+        }
+
+
+        //сохранение результата
+        public async Task<bool> Save()
+        {
+            var save = await _context.SaveChangesAsync();
+            return save > 0 ? true : false;
+        }
     }
 }

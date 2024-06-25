@@ -21,5 +21,15 @@ namespace RequestHandler.Interfaces
 
         //авторизация
         Task<User> Authorithation(string login, string password);
+
+        //создание пользователя администратором
+        Task<bool> CreateUser(string login, string password, string surname, string name, int role);
+
+        //удаление пользователя администратором
+
+        //обновление пользователя администратором
+
+        //сохранение результата
+        Task<bool> Save();
     }
 }
