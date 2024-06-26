@@ -19,7 +19,7 @@ namespace RequestHandler.Repositories
             return await _context.UserAppointments
                 .Include(ua => ua.UserNavigation)
                 .Include(ua => ua.AppointmentNavigation)
-                .Include(ua => ua.AppointmentNavigation.Documents)
+                .Include(ua => ua.AppointmentNavigation.StatusNavigation)
                 .Where(ua => ua.UserNavigation.Role == roleId)
                 .ToListAsync();
         }

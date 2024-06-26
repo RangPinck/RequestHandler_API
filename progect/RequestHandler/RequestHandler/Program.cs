@@ -17,6 +17,7 @@ namespace RequestHandler
             builder.Services.AddScoped<IRolesRepository, RolesRepository>();
             builder.Services.AddScoped<IStatusRepository, StatusRepository>();
             builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+            builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
@@ -40,6 +41,20 @@ namespace RequestHandler
                 o.MultipartBoundaryLengthLimit = int.MaxValue;
                 o.MemoryBufferThreshold = int.MaxValue;
             });
+            builder.Services.AddCors(
+                opt =>
+                {
+                    opt.AddPolicy("Availability", builder =>
+                    {
+                        builder
+                        //написать только доверенные порты
+                        //.WithOrigins("","")
+                               .AllowAnyOrigin()
+                               .AllowAnyMethod()
+                               .AllowAnyHeader();
+                    });
+                }
+                );
 
             var app = builder.Build();
 
@@ -52,6 +67,7 @@ namespace RequestHandler
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthorization();
+            app.UseCors("Availability");
             app.MapControllers();
             app.Run();
         }

@@ -25,17 +25,16 @@ namespace RequestHandler.Controllers
         [HttpGet("GetAppointments")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<AppointmentGetDto>))]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> GetAppointments(Guid logUserId, int roleId)
+        public async Task<IActionResult> GetAppointments(Guid logUserId, int roleId = 4)
         {
-            if (!await _repositoryU.ValidateAdmin(logUserId))
+            if (!await _repositoryU.ValidateAdmin(logUserId)
+                && !await _repositoryU.ValidateApproval(logUserId)
+                && !await _repositoryU.ValidateMaster(logUserId))
                 return BadRequest($"No correct request: user with \"{logUserId}\" id not validation.");
 
-            if (!await _repositoryU.ValidateApproval(logUserId))
-                return BadRequest($"No correct request: user with \"{logUserId}\" id not validation.");
+            if (roleId <= 0 || roleId >= 5)
+                return BadRequest($"No correct request: {roleId} can't be more 4 and can't be less 1.");
 
-            if (!await _repositoryU.ValidateMaster(logUserId))
-                return BadRequest($"No correct request: user with \"{logUserId}\" id not validation.");
-            
             var approvs = _mapper.Map<List<AppointmentGetDto>>(
                 await _repositoryA.GetAppointments(roleId));
 

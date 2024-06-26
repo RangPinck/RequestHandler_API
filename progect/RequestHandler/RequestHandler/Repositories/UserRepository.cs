@@ -99,7 +99,7 @@ namespace RequestHandler.Repositories
                 Role = role
             };
 
-            _context.Users.Add(user);
+            await _context.Users.AddAsync(user);
 
             return await Save();
         }
