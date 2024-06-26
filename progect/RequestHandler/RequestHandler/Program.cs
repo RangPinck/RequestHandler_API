@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using RequestHandler.Interfaces;
 using RequestHandler.Models;
 using RequestHandler.Repositories;
@@ -10,9 +13,10 @@ namespace RequestHandler
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddScoped<IUserRepository,UserRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IRolesRepository, RolesRepository>();
             builder.Services.AddScoped<IStatusRepository, StatusRepository>();
+            builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
@@ -30,7 +34,12 @@ namespace RequestHandler
                         //builder.Configuration.GetConnectionString("LocalDbSecond")
                         );
                 });
-
+            builder.Services.Configure<FormOptions>(o =>
+            {
+                o.ValueLengthLimit = int.MaxValue;
+                o.MultipartBoundaryLengthLimit = int.MaxValue;
+                o.MemoryBufferThreshold = int.MaxValue;
+            });
 
             var app = builder.Build();
 
@@ -41,6 +50,7 @@ namespace RequestHandler
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
             app.UseAuthorization();
             app.MapControllers();
             app.Run();

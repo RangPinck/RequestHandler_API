@@ -22,6 +22,7 @@ namespace RequestHandler.Controllers
             _mapper = mapper;
         }
 
+        //проверить контроллер ещё раз
         [HttpGet("GetAllUsers")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<UserDto>))]
         [ProducesResponseType(400)]
@@ -30,8 +31,10 @@ namespace RequestHandler.Controllers
             if (roleId <= 0 || roleId >= 5)
                 return BadRequest($"No correct request: {roleId} can't be more 4 and can't be less 1.");
 
-            if (!await _repository.ValidateAdmin(logUserId)
-                && !await _repository.ValidateApproval(logUserId))
+            if (!await _repository.ValidateAdmin(logUserId))
+                return BadRequest($"No correct request: user with \"{logUserId}\" id not validation.");
+
+            if (!await _repository.ValidateApproval(logUserId))
                 return BadRequest($"No correct request: user with \"{logUserId}\" id not validation.");
 
             var users =
@@ -167,42 +170,6 @@ namespace RequestHandler.Controllers
             }
 
             return Ok("Successefully deleted.");
-        }
-
-        [HttpPost("UploadFile")]
-        public async Task<IActionResult> UploadFile(IFormFile file)
-        {
-            var uploadPath = $"{Directory.GetCurrentDirectory()}\\LocalFiles";
-
-            if (!Directory.Exists(uploadPath))
-            {
-                Directory.CreateDirectory(uploadPath);
-            }
-
-            string fullPath = $"{uploadPath}\\{file.FileName}";
-
-            using (var fileStream = new FileStream(fullPath, FileMode.Create))
-            {
-                await file.CopyToAsync(fileStream);
-            }
-
-            return Ok($"Successefully upload.{file.FileName}");
-        }
-
-        [HttpGet("DownloadFile")]
-        public async Task<IActionResult> DownloadFile(string fileTitle)
-        {
-            //var uploadPath = $"{Directory.GetCurrentDirectory()}\\LocalFiles\\{fileTitle}";
-            //var provider = new FileExtensionContentTypeProvider();
-
-            //if (!provider.TryGetContentType(uploadPath, out var contentType))
-            //{
-            //    contentType = "application/octet-stream";
-            //}
-
-            //var bytes = await System.IO.File.ReadAllBytesAsync(uploadPath);
-
-            //return File(bytes,contentType,Path.GetFileName(uploadPath));
         }
     }
 }
