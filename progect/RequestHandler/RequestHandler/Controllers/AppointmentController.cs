@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using RequestHandler.DTO;
 using RequestHandler.Interfaces;
 using RequestHandler.Models;
+using System.Data;
 
 namespace RequestHandler.Controllers
 {
@@ -42,6 +43,39 @@ namespace RequestHandler.Controllers
                 return BadRequest(ModelState);
 
             return Ok(approvs);
+        }
+
+        [HttpPost("CreateAppointment")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> CreateAppointment(Guid userId, string Problem, string? DiscriptionProblem, string Place)
+        {
+            if (string.IsNullOrEmpty(Problem))
+                return BadRequest($"No correct request: Problem is null or empty.");
+
+            if (string.IsNullOrEmpty(Place))
+                return BadRequest($"No correct request: Place is null or empty.");
+
+            if (!await _repositoryU.UserExists(userId))
+                return NotFound($"User with id \"{userId}\" not found.");
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var create = await _repositoryA.CreateAppointment(
+                userId: userId,
+                Problem: Problem,
+                DiscriptionProblem: DiscriptionProblem,
+                Place: Place
+                );
+
+            if (!create)
+            {
+                ModelState.AddModelError("", $"Something went wrong while saving.");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successefully created.");
         }
 
     }

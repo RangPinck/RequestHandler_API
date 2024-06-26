@@ -46,7 +46,12 @@ namespace RequestHandler.Controllers
             var extension = "." + file.FileName.Split('.')[file.FileName.Split('.').Length - 1];
             string title = Path.GetFileName(file.FileName) + extension;
 
-            await _repositoryD.UploadDocument(appointmentId, title);
+            if (!await _repositoryD.UploadDocument(appointmentId, title))
+            {
+                ModelState.AddModelError("", "Somthing went wrong uploating document.");
+                return StatusCode(500, ModelState);
+            }
+
             if (!await _repositoryD.UploadFile(file, title))
             {
                 ModelState.AddModelError("", "Somthing went wrong uploating document.");
