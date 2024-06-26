@@ -21,7 +21,5 @@
         public DateTime? DateFix { get; set; }
 
         public string Status { get; set; } = null!;
-
-        public Guid Document { get; set; }
     }
 }

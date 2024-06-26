@@ -52,6 +52,15 @@ namespace RequestHandler.Repositories
         //получение списка заявок мастером/управляющим/администратором
         public async Task<ICollection<UserAppointment>> GetAppointments(int roleId = 4)
         {
+            if (roleId > 4 || roleId < 1)
+            {
+                return await _context.UserAppointments
+                .Include(ua => ua.UserNavigation)
+                .Include(ua => ua.AppointmentNavigation)
+                .Include(ua => ua.AppointmentNavigation.StatusNavigation)
+                .ToListAsync();
+            }
+
             return await _context.UserAppointments
                 .Include(ua => ua.UserNavigation)
                 .Include(ua => ua.AppointmentNavigation)
@@ -83,13 +92,14 @@ namespace RequestHandler.Repositories
 
             _context.Appointments.Update(app);
 
-            UserAppointment userAppointment = new UserAppointment()
-            {
-                Appointment = appointmentId,
-                User = userId
-            };
+            var sv = await Save();
 
-            await _context.UserAppointments.AddAsync(userAppointment);
+            if (!sv)
+            {
+                return sv;
+            }
+
+            await _context.Database.ExecuteSqlAsync($"INSERT INTO [User_appointment] ([appointment], [user]) VALUES({appointmentId},{userId})");
 
             return await Save();
         }
@@ -103,13 +113,14 @@ namespace RequestHandler.Repositories
 
             _context.Appointments.Update(app);
 
-            UserAppointment userAppointment = new UserAppointment()
-            {
-                Appointment = appointmentId,
-                User = userId
-            };
+            var sv = await Save();
 
-            await _context.UserAppointments.AddAsync(userAppointment);
+            if (!sv)
+            {
+                return sv;
+            }
+
+            await _context.Database.ExecuteSqlAsync($"INSERT INTO [User_appointment] ([appointment], [user]) VALUES({appointmentId},{userId})");
 
             return await Save();
         }
@@ -119,6 +130,12 @@ namespace RequestHandler.Repositories
         {
             var save = await _context.SaveChangesAsync();
             return save > 0 ? true : false;
+        }
+
+        //проверка наличия заявки по id
+        public async Task<bool> AppointmentExists(Guid appointmentId)
+        {
+            return await _context.Appointments.AnyAsync(a => a.AppointmentId == appointmentId);
         }
     }
 }

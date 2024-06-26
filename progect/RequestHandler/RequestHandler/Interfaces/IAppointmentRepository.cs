@@ -4,6 +4,9 @@ namespace RequestHandler.Interfaces
 {
     public interface IAppointmentRepository
     {
+        //проверка наличия заявки по id
+        Task<bool> AppointmentExists(Guid appointmentId);
+
         //получение списка заявок мастером/управляющим/администратором
         Task<ICollection<UserAppointment>> GetAppointments(int roleId = 4);
 

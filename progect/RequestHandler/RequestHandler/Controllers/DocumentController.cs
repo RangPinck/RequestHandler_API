@@ -35,6 +35,25 @@ namespace RequestHandler.Controllers
             return Ok(documents);
         }
 
+        [HttpGet("DownloadDocument")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public async Task<FileContentResult> DownloadDocument(string title)
+        {
+            if (string.IsNullOrEmpty(title))
+                throw new Exception($"No correct request: title is null or empty.");
+
+            if (!await _repositoryD.DocumentExists(title))
+                throw new FileNotFoundException("File not found.");
+
+            var file = await _repositoryD.DownloadFile(title);
+
+            if (!ModelState.IsValid)
+                throw new FileNotFoundException("File not found.");
+
+            return file;
+        }
+
         [HttpPost("UploadDocument")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -59,25 +78,6 @@ namespace RequestHandler.Controllers
             }
 
             return Ok("Successefully uploaded.");
-        }
-
-        [HttpGet("DownloadDocument")]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(400)]
-        public async Task<FileContentResult> DownloadDocument(string title)
-        {
-            if (string.IsNullOrEmpty(title))
-                throw new Exception($"No correct request: title is null or empty.");
-
-            if (!await _repositoryD.DocumentExists(title))
-                throw new FileNotFoundException("File not found.");
-
-            var file = await _repositoryD.DownloadFile(title);
-
-            if (!ModelState.IsValid)
-                throw new FileNotFoundException("File not found.");
-
-            return file;
         }
 
         [HttpDelete("DeleteDocument")]

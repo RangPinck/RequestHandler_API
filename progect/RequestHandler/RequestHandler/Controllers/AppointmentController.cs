@@ -15,7 +15,7 @@ namespace RequestHandler.Controllers
         private readonly IUserRepository _repositoryU;
         private readonly IMapper _mapper;
 
-        public AppointmentController(IAppointmentRepository repositoryA,IUserRepository repositoryU, IMapper mapper)
+        public AppointmentController(IAppointmentRepository repositoryA, IUserRepository repositoryU, IMapper mapper)
         {
             _repositoryA = repositoryA;
             _repositoryU = repositoryU;
@@ -32,9 +32,6 @@ namespace RequestHandler.Controllers
                 && !await _repositoryU.ValidateApproval(logUserId)
                 && !await _repositoryU.ValidateMaster(logUserId))
                 return BadRequest($"No correct request: user with \"{logUserId}\" id not validation.");
-
-            if (roleId <= 0 || roleId >= 5)
-                return BadRequest($"No correct request: {roleId} can't be more 4 and can't be less 1.");
 
             var approvs = _mapper.Map<List<AppointmentGetDto>>(
                 await _repositoryA.GetAppointments(roleId));
@@ -78,5 +75,106 @@ namespace RequestHandler.Controllers
             return Ok("Successefully created.");
         }
 
+
+        [HttpPut("UpdateAppointment")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> UpdateAppointment(Guid appointmentId, string? Problem, string? DiscriptionProblem, string? Place)
+        {
+            if (!await _repositoryA.AppointmentExists(appointmentId))
+                return NotFound($"Appointment with id \"{appointmentId}\" not found.");
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!await _repositoryA.UpdateAppointment(
+                appointmentId: appointmentId,
+                Problem: Problem,
+                DiscriptionProblem: DiscriptionProblem,
+                Place: Place
+                ))
+            {
+                ModelState.AddModelError("", "Somthing went wrong updateing appointment.");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successefully updated.");
+        }
+
+        [HttpPut("UpdateAppointmentApprove")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> UpdateAppointmentApprove(Guid userId, Guid appointmentId)
+        {
+            if (!await _repositoryU.ValidateApproval(userId))
+                return BadRequest($"No correct request: user with \"{userId}\" id not validation.");
+
+            if (!await _repositoryA.AppointmentExists(appointmentId))
+                return NotFound($"Appointment with id \"{appointmentId}\" not found.");
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!await _repositoryA.UpdateAppointmentApprove(
+                   userId: userId,
+                   appointmentId: appointmentId
+                ))
+            {
+                ModelState.AddModelError("", "Somthing went wrong approved appointment.");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successefully approved.");
+        }
+
+        [HttpPut("UpdateAppointmentFix")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> UpdateAppointmentFix(Guid userId, Guid appointmentId)
+        {
+            if (!await _repositoryU.ValidateMaster(userId))
+                return BadRequest($"No correct request: user with \"{userId}\" id not validation.");
+
+            if (!await _repositoryA.AppointmentExists(appointmentId))
+                return NotFound($"Appointment with id \"{appointmentId}\" not found.");
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!await _repositoryA.UpdateAppointmentFix(
+                   userId: userId,
+                   appointmentId: appointmentId
+                ))
+            {
+                ModelState.AddModelError("", "Somthing went wrong approved fixing.");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successefully fixed.");
+        }
+
+        [HttpDelete("DeleteAppointment")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> DeleteAppointment(Guid appointmentId)
+        {
+            if (!await _repositoryA.AppointmentExists(appointmentId))
+                return NotFound($"Appointment with id \"{appointmentId}\" not found.");
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!await _repositoryA.DeleteAppointment(appointmentId))
+            {
+                ModelState.AddModelError("", "Somthing went wrong deleting appointment.");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successefully deleted.");
+        }
     }
 }
