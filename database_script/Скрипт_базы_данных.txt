@@ -90,6 +90,12 @@ create table [Documents](
 	[appointment] uniqueidentifier constraint fk_appointment_to_document foreign key
 	references [Appointments]([appointment_id]) on delete cascade
 );
+insert into [Documents] ([title], [appointment]) values
+('Накладная.txt', '587DA282-8321-4DBE-93C4-A5913B0595BF'),
+('Схема.txt', '103C043B-3EB7-4A97-9E71-4E8FFBB081A8'),
+('Фото.txt', '69D03AE9-6A0E-4990-93B9-6919322EDC16'),
+('Список_ip.txt', '25FCD773-14FC-4DC4-BFA8-C9F735A44432'),
+('fi.txt', null)
 
 --select * from [Roles];
 --select * from [User];

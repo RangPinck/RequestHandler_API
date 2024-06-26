@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using RequestHandler.Interfaces;
 using RequestHandler.Models;
+using System.IO;
 
 namespace RequestHandler.Repositories
 {
@@ -43,7 +44,7 @@ namespace RequestHandler.Repositories
                 case < 4:
                     return await _context.Documents.ToListAsync();
                 case 4:
-                    List<UserAppointment> userAppointments = 
+                    List<UserAppointment> userAppointments =
                         await _context.UserAppointments
                         .Where(ua => ua.User == userId)
                         .ToListAsync();
@@ -56,7 +57,7 @@ namespace RequestHandler.Repositories
                     }
 
                     return await _context.Documents
-                        .Where(d => d.Appointment != null && appId.Contains((Guid) d.Appointment))
+                        .Where(d => d.Appointment != null && appId.Contains((Guid)d.Appointment))
                         .ToListAsync();
                 default:
                     throw new NotImplementedException();
@@ -133,9 +134,31 @@ namespace RequestHandler.Repositories
 
             var bytes = await System.IO.File.ReadAllBytesAsync(filepath);
             return new FileContentResult(bytes, contenttype)
-            { 
+            {
                 FileDownloadName = title
             };
+        }
+
+        //удаление файла
+        public async Task<bool> DeleteFile(Guid doucumentId)
+        {
+            Document file = await _context.Documents.FirstAsync(d => d.DocumentId == doucumentId);
+            string title = file.Title;
+            var filepath = Path.Combine(Directory.GetCurrentDirectory(), "LocalFiles", title);
+            try
+            {
+                FileInfo fileInf = new FileInfo(filepath);
+                if (fileInf.Exists)
+                {
+                    fileInf.Delete();
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
 }

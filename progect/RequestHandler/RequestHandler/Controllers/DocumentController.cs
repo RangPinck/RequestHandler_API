@@ -74,5 +74,35 @@ namespace RequestHandler.Controllers
 
             return file;
         }
+
+        [HttpDelete("DeleteDocument")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> DeleteDocument(Guid logUserId, Guid doucumentId)
+        {
+            if (!await _repositoryU.ValidateAdmin(logUserId))
+                return BadRequest($"No correct request: user with \"{logUserId}\" id not validation.");
+
+            if (!await _repositoryD.DocumentExists(doucumentId))
+                return NotFound($"Document with id \"{doucumentId}\" not found.");
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!await _repositoryD.DeleteFile(doucumentId))
+            {
+                ModelState.AddModelError("", "Somthing went wrong deleting doucument.");
+                return StatusCode(500, ModelState);
+            }
+
+            if (!await _repositoryD.DeleteDocument(doucumentId))
+            {
+                ModelState.AddModelError("", "Somthing went wrong deleting doucument.");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successefully deleted.");
+        }
     }
 }

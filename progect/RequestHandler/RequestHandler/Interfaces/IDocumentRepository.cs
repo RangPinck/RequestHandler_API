@@ -29,6 +29,9 @@ namespace RequestHandler.Interfaces
         //удаление документа
         Task<bool> DeleteDocument(Guid doucumentId);
 
+        //удаление файла
+        Task<bool> DeleteFile(Guid doucumentId);
+
         //сохранение результата
         Task<bool> Save();
 
