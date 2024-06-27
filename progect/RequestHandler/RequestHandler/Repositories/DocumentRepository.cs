@@ -104,6 +104,24 @@ namespace RequestHandler.Repositories
             }
         }
 
+        public async Task<bool> UploadFile2(IFormFile file, string title)
+        {
+            try
+            {
+                // Загрузка файла на сервер
+                using (var stream = new FileStream(Path.Combine(Directory.GetCurrentDirectory(), "LocalFiles", title), FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
         //удаление документа
         public async Task<bool> DeleteDocument(Guid doucumentId)
         {

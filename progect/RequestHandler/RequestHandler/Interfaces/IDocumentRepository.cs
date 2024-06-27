@@ -35,5 +35,7 @@ namespace RequestHandler.Interfaces
         //сохранение результата
         Task<bool> Save();
 
+        Task<bool> UploadFile2(IFormFile file, string title);
+
     }
 }

@@ -59,8 +59,14 @@ namespace RequestHandler.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> UploadDocument(Guid logUserId, Guid? appointmentId, IFormFile file)
         {
+
             if (!await _repositoryU.ValidateAdmin(logUserId))
                 return BadRequest($"No correct request: user with \"{logUserId}\" id not validation.");
+
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("No file selected.");
+            }
 
             var extension = "." + file.FileName.Split('.')[file.FileName.Split('.').Length - 1];
             string title = Path.GetFileName(file.FileName) + extension;
@@ -72,6 +78,37 @@ namespace RequestHandler.Controllers
             }
 
             if (!await _repositoryD.UploadFile(file, title))
+            {
+                ModelState.AddModelError("", "Somthing went wrong uploating document.");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successefully uploaded.");
+        }
+
+        [HttpPost("UploadDocument2")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> UploadDocument2(Guid logUserId, Guid? appointmentId, IFormFile file)
+        {
+            if (!await _repositoryU.ValidateAdmin(logUserId))
+                return BadRequest($"No correct request: user with \"{logUserId}\" id not validation.");
+
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("No file selected.");
+            }
+
+            var extension = "." + file.FileName.Split('.')[file.FileName.Split('.').Length - 1];
+            string title = Path.GetFileName(file.FileName) + extension;
+
+            if (!await _repositoryD.UploadDocument(appointmentId, title))
+            {
+                ModelState.AddModelError("", "Somthing went wrong uploating document.");
+                return StatusCode(500, ModelState);
+            }
+
+            if (!await _repositoryD.UploadFile2(file, title))
             {
                 ModelState.AddModelError("", "Somthing went wrong uploating document.");
                 return StatusCode(500, ModelState);
@@ -108,6 +145,6 @@ namespace RequestHandler.Controllers
             }
 
             return Ok("Successefully deleted.");
-        }
+        } 
     }
 }
