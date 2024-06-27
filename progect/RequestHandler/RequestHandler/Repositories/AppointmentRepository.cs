@@ -75,6 +75,7 @@ namespace RequestHandler.Repositories
             var app = await _context.Appointments.FirstOrDefaultAsync(a => a.AppointmentId == appointmentId);
 
             app.Problem = string.IsNullOrEmpty(Problem) ? app.Problem : Problem;
+            
             app.DiscriptionProblem = string.IsNullOrEmpty(DiscriptionProblem) ? app.DiscriptionProblem : DiscriptionProblem;
             app.Place = string.IsNullOrEmpty(Place) ? app.Place : Place;
            
@@ -89,6 +90,7 @@ namespace RequestHandler.Repositories
             var app = await _context.Appointments.FirstOrDefaultAsync(a => a.AppointmentId == appointmentId);
 
             app.DateApprove = DateTime.UtcNow;
+            app.Status = 2;
 
             _context.Appointments.Update(app);
 
@@ -110,6 +112,7 @@ namespace RequestHandler.Repositories
             var app = await _context.Appointments.FirstOrDefaultAsync(a => a.AppointmentId == appointmentId);
 
             app.DateFix = DateTime.UtcNow;
+            app.Status = 3;
 
             _context.Appointments.Update(app);
 
