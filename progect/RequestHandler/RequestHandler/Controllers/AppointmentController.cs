@@ -102,7 +102,6 @@ namespace RequestHandler.Controllers
             return Ok("Successefully updated.");
         }
 
-        //проверить работу
         [HttpPut("UpdateAppointmentApprove")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -130,7 +129,6 @@ namespace RequestHandler.Controllers
             return Ok("Successefully approved.");
         }
 
-        //проверить работу
         [HttpPut("UpdateAppointmentFix")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]

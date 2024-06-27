@@ -31,14 +31,9 @@ namespace RequestHandler.Repositories
 
             var sv = await Save();
 
-            if (!sv)
-            {
-                return sv;
-            }
-
             await _context.Database.ExecuteSqlAsync($"INSERT INTO [User_appointment] ([appointment], [user]) VALUES({appId},{userId})");
 
-            return await Save();
+            return sv;
         }
 
         //удаление заявки
@@ -96,14 +91,9 @@ namespace RequestHandler.Repositories
 
             var sv = await Save();
 
-            if (!sv)
-            {
-                return sv;
-            }
-
             await _context.Database.ExecuteSqlAsync($"INSERT INTO [User_appointment] ([appointment], [user]) VALUES({appointmentId},{userId})");
 
-            return await Save();
+            return sv;
         }
 
         //изменение заявки мастером
@@ -118,14 +108,9 @@ namespace RequestHandler.Repositories
 
             var sv = await Save();
 
-            if (!sv)
-            {
-                return sv;
-            }
-
             await _context.Database.ExecuteSqlAsync($"INSERT INTO [User_appointment] ([appointment], [user]) VALUES({appointmentId},{userId})");
 
-            return await Save();
+            return sv;
         }
 
         //сохранение результата

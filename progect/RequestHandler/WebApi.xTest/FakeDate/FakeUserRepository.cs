@@ -1,4 +1,7 @@
-﻿using RequestHandler.Interfaces;
+﻿using Azure.Core;
+using Microsoft.EntityFrameworkCore;
+using RequestHandler.Another;
+using RequestHandler.Interfaces;
 using RequestHandler.Models;
 using System;
 using System.Collections.Generic;
@@ -70,59 +73,104 @@ namespace WebApi.xTest.FakeDate
             };
         }
 
-        public Task<User> Authorithation(string login, string password)
+        public async Task<User> Authorithation(string login, string password)
         {
-            throw new NotImplementedException();
+            string hash = Hashing.ToSHA256(password);
+            return _fakeUsers.FirstOrDefault(u => u.Login == login && u.Password == hash);
         }
 
-        public Task<bool> CreateUser(string login, string password, string surname, string name, int role)
+        public async Task<bool> CreateUser(string login, string password, string surname, string name, int role)
         {
-            throw new NotImplementedException();
+            User user = new User()
+            {
+                UserId = Guid.NewGuid(),
+                Login = login,
+                Password = Hashing.ToSHA256(password),
+                Surname = surname,
+                Name = name,
+                Role = role,
+            };
+            _fakeUsers.Add(user);
+            return await Save();
         }
 
-        public Task<bool> DeleteUser(Guid id)
+        public async Task<bool> DeleteUser(Guid id)
         {
-            throw new NotImplementedException();
+            User user = _fakeUsers.FirstOrDefault(u => u.UserId == id);
+            _fakeUsers.Remove(user);
+            return await Save();
         }
 
-        public Task<ICollection<User>> GetAllUsers(int? roleId = null)
+        public async Task<ICollection<User>> GetAllUsers(int? roleId = null)
         {
-            throw new NotImplementedException();
+            List<User> users;
+
+            if (roleId != null)
+               return _fakeUsers.Where(u => u.Role == (int)roleId).ToList();
+            else
+                return _fakeUsers.ToList();
         }
 
-        public Task<bool> Save()
+        public async Task<bool> Save()
         {
-            throw new NotImplementedException();
+            return true;
         }
 
-        public Task<bool> UpdateUser(Guid id, string? login = null, string? password = null, string? surname = null, string? name = null, int? role = null)
+        public async Task<bool> UpdateUser(Guid id, string? login = null, string? password = null, string? surname = null, string? name = null, int? role = null)
         {
-            throw new NotImplementedException();
+            int index = _fakeUsers.FindIndex(u => u.UserId == id);
+            if (index != -1)
+            {
+                var user = _fakeUsers.FirstOrDefault(u => u.UserId == id);
+
+                user.Login = string.IsNullOrEmpty(login) ? user.Login : login;
+                user.Password = string.IsNullOrEmpty(password) ? user.Password : Hashing.ToSHA256(password);
+                user.Surname = string.IsNullOrEmpty(surname) ? user.Surname : surname;
+                user.Name = string.IsNullOrEmpty(name) ? user.Name : name;
+                if (role != null && role >= 1 && role <= 4)
+                {
+                    user.Role = (int)role;
+                }
+                return await Save();
+            }
+            return false;
         }
 
-        public Task<bool> UserExists(string login)
+        public async Task<bool> UserExists(string login)
         {
-            throw new NotImplementedException();
+            return _fakeUsers.Any(u => u.Login == login);
         }
 
-        public Task<bool> UserExists(Guid UserId)
+        public async Task<bool> UserExists(Guid UserId)
         {
-            throw new NotImplementedException();
+            return _fakeUsers.Any(u => u.UserId == UserId);
         }
 
-        public Task<bool> ValidateAdmin(Guid logUserId)
+        public async Task<bool> ValidateAdmin(Guid logUserId)
         {
-            throw new NotImplementedException();
+            if (_fakeUsers
+                .First(u => u.UserId == logUserId).Role == 1)
+                return true;
+
+            return false;
         }
 
-        public Task<bool> ValidateApproval(Guid logUserId)
+        public async Task<bool> ValidateApproval(Guid logUserId)
         {
-            throw new NotImplementedException();
+            if (_fakeUsers
+               .First(u => u.UserId == logUserId).Role == 3)
+                return true;
+
+            return false;
         }
 
-        public Task<bool> ValidateMaster(Guid logUserId)
+        public async Task<bool> ValidateMaster(Guid logUserId)
         {
-            throw new NotImplementedException();
+            if (_fakeUsers
+               .First(u => u.UserId == logUserId).Role == 2)
+                return true;
+
+            return false;
         }
     }
 }
